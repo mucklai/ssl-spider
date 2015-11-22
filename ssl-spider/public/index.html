@@ -7,11 +7,11 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="datepicker.js"></script>
 <script type="text/javascript"src="http://nazar-pc.github.io/PickMeUp/js/jquery.pickmeup.js"></script>
-<script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="main.js"></script>
+<script src="/socket.io/socket.io.js"></script>
 <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.5/readable/bootstrap.min.css" rel="stylesheet">
 <link href="http://nazar-pc.github.io/PickMeUp/css/pickmeup.css" rel="stylesheet">
-<link href="jQuery-plugin-progressbar.css" rel="stylesheet">
+<link href="main.css" rel="stylesheet">
 
 </head>
 <body style="background-color:#dfdfdf">
@@ -37,16 +37,13 @@
 		<div class="row">
 			<div class="col-lg-1"></div>
 			<div class="col-lg-2">
-				<a class="glyphicon glyphicon-play centerbtn" style="text-decoration:None;">&nbspStart</a>
+				<a id="start" class="glyphicon glyphicon-play centerbtn" style="text-decoration:None;">&nbspStart</a>
 			</div>
 			<div class="col-lg-2">
-				<a class="glyphicon glyphicon-pause centerbtn" style="text-decoration:None;">&nbspPause</a>
+				<a id="pause" class="glyphicon glyphicon-pause centerbtn" style="text-decoration:None;">&nbspPause</a>
 			</div>
-			<div class="col-lg-2">
-				<a class="glyphicon glyphicon-stop centerbtn" style="text-decoration:None;">&nbspStop</a>
-			</div>
-			<div class="col-lg-1 center">Range:</div>
-			<div class="col-lg-3">
+			<div class="col-lg-2 center">Expiration before:</div>
+			<div class="col-lg-4">
 				<input id="datepicker"class="form-control " style="text-align:center" id="focusedInput" type="text" value="">
 			<div id="dates" ></div>
 			</div>
@@ -133,7 +130,9 @@
 				
 		</div>
 	</div>	
-	<!-- Results progress -->	
+	<!-- Results progress -->
+	
+	
 </div>
 
 

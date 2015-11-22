@@ -103,6 +103,9 @@ io.on('connection', function (socket) {
 	socket.sha1_array = [];
 	socket.i = 0;
 	socket.j = 0;
+	
+	var return_data = JSON.stringify({type: 0});
+	socket.emit('data', return_data);
 
 	socket.on('start', function (data) {
 		var date = data.date;
@@ -110,7 +113,7 @@ io.on('connection', function (socket) {
 	});
 
 	socket.on('update_me', function (data) {
-		var urls_to_send - null;
+		var urls_to_send = null;
 		data = JSON.parse(data);
 		if (data.hasOwnProperty('last_index')) {
 			var last_index = data.lastIndex;
