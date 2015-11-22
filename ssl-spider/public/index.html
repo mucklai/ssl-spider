@@ -12,6 +12,7 @@
 <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.5/readable/bootstrap.min.css" rel="stylesheet">
 <link href="http://nazar-pc.github.io/PickMeUp/css/pickmeup.css" rel="stylesheet">
 <script src="Chart.min.js"></script>
+<script src="paging.js"></script>
 <link href="main.css" rel="stylesheet">
 </head>
 
@@ -63,7 +64,7 @@
 			</ul>
 			<div id="myTabContent" class="tab-content">
 			  <div class="tab-pane fade active in" id="expiring">
-			   <div class="row">
+			   <div class="row" id="results"> 
 	  			<table class="table table-striped table-hover ">
 				  <thead>
 				    <tr>
@@ -76,6 +77,14 @@
    				   </tbody>
 				  </table> 
 				 </div>
+<<<<<<< HEAD
+=======
+				 <div class="row">
+				 <center>	
+				 	<div id="id="pageNavPosition"></div>
+				 </center>
+				 </div>
+>>>>>>> c5bda1f71baa203f5a5ab8a7a47db2f7c03fa1ee
 			  </div>
 			  <div class="tab-pane fade" id="stable">
 			  	<div class="row">
@@ -153,6 +162,15 @@
 	</div>	
 	<!-- Results progress -->	
 </div>
+<!--Footer-->
+<h6 style="text-align:center;color:#ababab;font-size:12px">© Hussain Mucklai & Revanth Pobala. All Rights Reserved.</h6> 
+<!--Footer End-->
+    <script type="text/javascript">
+        var pager = new Pager('results', 5); 
+        pager.init(); 
+        pager.showPageNav('pager', 'pageNavPosition'); 
+        pager.showPage(1);
+	</script>
 <!-- Body End -->
 
 
