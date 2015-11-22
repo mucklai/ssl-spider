@@ -14,10 +14,10 @@ var STABLE = 1;
 var NO_SSL = 2;
 var SHA1 = 3;
 
-function scan_urls(url_array, stable_array, expiring_array, no_ssl_array, sha1_array, i, j, date) {
+function scan_urls(url_array, stable_array, expiring_array, no_ssl_array, sha1_array, i, j, date, rl) {
 
 	var time = new Date();
-	var rl = require('readline').createInterface({
+	rl = require('readline').createInterface({
 		input: require('fs').createReadStream(file)
 	});
 
@@ -58,15 +58,15 @@ function scan_urls(url_array, stable_array, expiring_array, no_ssl_array, sha1_a
 				//if cipher is sha1
 				sha1_array.push(new_url);
 			}
-			if (true) {
+			if (date >= (new Date(new_url.valid_to))) {
 				//if within date
 				expiring_array.push(new_url);
+				//console.log("Expiring: " + new_url.valid_to);
 			} else {
 				//if outside range
 				stable_array.push(new_url);
 			}
 			j++;
-			console.log(new_url.cipher);
 		}).on('error', function(e) {
 			new_url.ssl = false;
 			url_array.push(new_url);
@@ -104,16 +104,18 @@ io.on('connection', function (socket) {
 	socket.sha1_array = [];
 	socket.i = 0;
 	socket.j = 0;
+	socket.rl = null;
 
 	socket.emit('initialize');
 
 	socket.on('start', function (data) {
-		var date = data.date;
-		scan_urls(url_array, stable_array, expiring_array, no_ssl_array, sha1_array, socket.i, socket.j, date);
+		date = new Date(data);
+		scan_urls(socket.url_array, socket.stable_array, socket.expiring_array, socket.no_ssl_array, socket.sha1_array, socket.i, socket.j, date, socket.rl);
 	});
 
 	socket.on('update_me', function (data) {
 		// data has attributes type (of url), page
+		console.log("received");
 		var urls_to_send = null;
 		data = JSON.parse(data);
 		var first = data.page * 20;
@@ -144,7 +146,8 @@ io.on('connection', function (socket) {
 		};
 		return_data = JSON.stringify(return_data);
 		socket.emit('update', return_data);
-		console.log(return_data);
+		console.log("sent");
+		//console.log(return_data);
 	});
 
 	socket.on('url', function(data){
@@ -162,5 +165,19 @@ io.on('connection', function (socket) {
 		if (!found) {
 			socket.emit('not_found');
 		}
+	});
+
+	socket.on('pause', function(){
+		if (rl) {
+			rl.pause();
+		}
+		console.log("paused");
+	});
+
+	socket.on('resume', function(){
+		if (rl) {
+			rl.resume();
+		}
+		console.log("resumed");
 	});
 });
