@@ -152,10 +152,11 @@ io.on('connection', function (socket) {
 		//data has attribute name (of url)
 		var found = false;
 		data = JSON.parse(data);
-		for (var a = 0; a < url_array.length; a++) {
-			if (url_array[a].name == data.name) {
+		for (var a = 0; a < socket.url_array.length; a++) {
+			if (socket.url_array[a].name == data.name) {
 				found = true;
-				var return_data = JSON.stringify(url_array[a]);
+				console.log(socket.url_array[a].valid_to);
+				var return_data = JSON.stringify(socket.url_array[a]);
 				socket.emit('url', return_data);
 				break;
 			}

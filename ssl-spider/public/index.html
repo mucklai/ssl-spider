@@ -11,6 +11,7 @@
 <script src="/socket.io/socket.io.js"></script>
 <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.5/readable/bootstrap.min.css" rel="stylesheet">
 <link href="http://nazar-pc.github.io/PickMeUp/css/pickmeup.css" rel="stylesheet">
+<script src="Chart.min.js"></script>
 <link href="main.css" rel="stylesheet">
 </head>
 
@@ -113,20 +114,26 @@
 			<div class="row">
 				<div class="col-lg-8">
 					<div class="form-group">
-					  <input class="form-control" id="focusedInput" type="text" placeholder="Search Website..">
+					  <input class="form-control" id="searchInput" type="text" placeholder="Search Certificates.."></input>
 					</div>
 				</div>
 				<div class="col-lg-4">
-					<div  class="btn btn-primary">Search</div>
+					<div id="search" class="btn btn-primary">Search</div>
 				</div>
 			</div>
-			<div class="row">
-			<h4 style="text-align:center">Progress</h4>
-			</div>
-			<div class="row" id="stats" data-percent="0">
-				<center><div id="percentage" class="progress-bar" data-duration="1000" data-color="#ccc,yellow"></div>
-				</center>
-			</div>		
+			<div id="analysis" style="height: 300px; width: 530px;">
+				<div class="row">
+					<h4 style="text-align:center">Progress</h4>
+				</div>
+				<div class="row" id="stats" style="margin-left:0%; margin-right:0%">
+					<div class="center progress progress-striped active">
+	  					<div id="my_progress_bar" class="progress-bar" style="width: 0%"></div>
+					</div>
+				</div>
+				<div class="row" id="stats" style="margin-left:0%; margin-right:0%">
+					<h5 id="my_progress_text" style="text-align:center">0%</h5>
+				</div>
+			</div>			
 				
 		</div>
 	</div>	
@@ -145,23 +152,16 @@
 	  <div class="modal-dialog">
 	    <div class="modal-content">
 	      <div class="modal-header">
-	        <h4 class="modal-title" style="text-align:center"> Data</h4>
+	      	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&close;</button>
+	        <h3 id="url_title" class="modal-title" style="text-align:center"> Data</h>
 	      </div>
 	      <div class="modal-body">
-	        
+	      	<h5 id="url_name"> </h5>
+	      	<h5 id="url_cert"> </h5>
+	      	<h5 id="url_algo"> </h5>
+	      	<h5 id="url_grade"> </h5>	        
 	      </div>
 	      <div class="modal-footer">
-		<center>	
-			  <ul class="pagination pagination-sm">
-			  <li class="disabled"><a href="#">&laquo;</a></li>
-			  <li class="active"><a href="#">1</a></li>
-			  <li><a href="#">2</a></li>
-			  <li><a href="#">3</a></li>
-			  <li><a href="#">4</a></li>
-			  <li><a href="#">5</a></li>
-			  <li><a href="#">&raquo;</a></li>
-			</ul> 
-		</center>
 	      </div>
 	    </div>
 	  </div>
