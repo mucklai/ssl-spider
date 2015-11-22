@@ -110,7 +110,7 @@ io.on('connection', function (socket) {
 	});
 
 	socket.on('update_me', function (data) {
-		var urls_to_send - null;
+		var urls_to_send = null;
 		data = JSON.parse(data);
 		if (data.hasOwnProperty('last_index')) {
 			var last_index = data.lastIndex;
