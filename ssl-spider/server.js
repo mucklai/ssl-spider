@@ -42,7 +42,17 @@ function scan_urls(url_array, stable_array, expiring_array, no_ssl_array, sha1_a
 		check_ssl(names[i]);
 		i++;
 	}
-
+	function ciph(str){
+		a= str.split("-");
+		for(i=0;i<=a.length;i++){
+			if(a[i]=="SHA"){
+				return true;			
+			}else{
+				return false;			
+			}		
+		}
+		
+	}
 	function check_ssl(target) {
 		var new_url = Object.create(url);
 		new_url.name = target;
@@ -55,8 +65,7 @@ function scan_urls(url_array, stable_array, expiring_array, no_ssl_array, sha1_a
 			new_url.valid_to = res.connection.getPeerCertificate().valid_to;
 			new_url.cipher = res.connection.getCipher().name;
 			url_array.push(new_url);
-			if (true) {
-				//if cipher is sha1
+			if (ciph(new_url.cipher)) {
 				sha1_array.push(new_url);
 			}
 			if (date >= (new Date(new_url.valid_to))) {
