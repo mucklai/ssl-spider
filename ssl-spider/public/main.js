@@ -84,11 +84,28 @@ $(document).ready(function() {
     socket.on('url', function (data) {
         console.log("found");
         data = JSON.parse(data);
+        var valid_to, cipher, grade;
+        if (data.valid_to) {
+            valid_to = data.valid_to;  
+        } else {
+            valid_to = "Unavailable";
+        }
+        if (data.cipher) {
+            cipher = data.cipher;
+        } else {
+            cipher = "Unavailable";
+        }
+        if (data.grade) {
+            grade = data.grade;
+        } else {
+            grade = "Unavailable";
+        }
+
         $("#url_title").text(data.name);
         $("#url_name").text("Name: " + data.name);
-        $("#url_cert").text("Certificate Valid Until: " + data.valid_to);
-        $("#url_algo").text("Hash algorithm: " + data.cipher);
-        $("#url_grade").text("SSL Lab Grade: " + data.grade);
+        $("#url_cert").text("Certificate Valid Until: " + valid_to);
+        $("#url_algo").text("Hash algorithm: " + cipher);
+        $("#url_grade").text("SSL Lab Grade: " + grade);
         $("#myModal").modal('show');
     });
 
@@ -111,6 +128,12 @@ $(document).ready(function() {
         update();
         //update current type and request data
     });
+
+    function pre_search(){
+        console.log('hi');
+        name = $(this).attr('id');
+        search(name);
+    }
 
     function update() {
         console.log("Requesting update");
@@ -178,8 +201,7 @@ $(document).ready(function() {
 
     $("#search").on('click', function(){
         var url = $("#searchInput").val();
-        var send_data = JSON.stringify({name: url});
-        socket.emit('url', send_data);
+        search(url);
     });
     
     function maketable(new_urls){
@@ -187,7 +209,7 @@ $(document).ready(function() {
     	switch(current_type) {
         	case 0:
         		for(i=0; i<new_urls.length;i++) {
-        			var html_row =  '<tr id="'+new_urls[i].name+'" class="info urlrow">';
+        			var html_row =  '<tr id="'+new_urls[i].name+'" class="info urlrow" onclick="pre_search();"> ';
         			html_row += "<td>"+(i+1).toString()+"</td>";
         			html_row += "<td>"+ new_urls[i].name+"</td>";
         			html_row +="<td>"+new_urls[i].valid_to+"</td></tr>";
@@ -199,7 +221,7 @@ $(document).ready(function() {
             case 1:
                 console.log("Stable");
                 for(i=0; i<new_urls.length;i++) {
-                    var html_row =  '<tr id="'+new_urls[i].name+'" class="info urlrow">';
+                    var html_row =  '<tr id="'+new_urls[i].name+'" class="info urlrow" onclick="pre_search();">';
                     html_row += "<td>"+(i+1).toString()+"</td>";
                     html_row += "<td>"+ new_urls[i].name+"</td>";
                     html_row +="<td>"+new_urls[i].valid_to+"</td></tr>";
@@ -210,7 +232,7 @@ $(document).ready(function() {
                 break;
             case 2:
                 for(i=0; i<new_urls.length;i++) {
-                    var html_row =  '<tr id="'+new_urls[i].name+'" class="info urlrow">';
+                    var html_row =  '<tr id="'+new_urls[i].name+'" class="info urlrow" onclick="pre_search();">';
                     html_row += "<td>"+(i+1).toString()+"</td>";
                     html_row += "<td>"+ new_urls[i].name+"</td></tr>";
                     html_table+=html_row;
@@ -220,7 +242,7 @@ $(document).ready(function() {
                 break;
             case 3:
                 for(i=0; i<new_urls.length;i++) {
-                    var html_row =  '<tr id="'+new_urls[i].name+'" class="info urlrow">';
+                    var html_row =  '<tr id="'+new_urls[i].name+'" class="info urlrow" onclick="pre_search();">';
                     html_row += '<td>'+(i+1).toString()+'</td>';
                     html_row += '<td>'+ new_urls[i].name+'</td>';
                     html_row +='<td>'+new_urls[i].cipher+'</td></tr>';
@@ -232,5 +254,9 @@ $(document).ready(function() {
         }
     }
 
+    function search(url){
+        var send_data = JSON.stringify({name: url});
+        socket.emit('url', send_data);
+    }
 
 });
