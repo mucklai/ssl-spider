@@ -108,25 +108,24 @@ $(document).ready(function() {
     var num_sha1 = 0;
 
     var socket = io('http://localhost');
-    socket.on('data', function (data) {
-        data = JSON.parse(data);
-        switch(data.type) {
-            case 0:
-                //initialize -- nothing to do
-                return;
-            case 1:
-                //updating: update progress bar and table
-                data = data.data;
-
-                return;
-            case 2:
-                //specific url
-                return;
-        }
+    socket.on('initialize', function () {
+        //initialize -- nothing to do
     });
 
+    socket.on('update', function (data) {
+        //updating: update progress bar and table
+        console.log(data);
+    });
+
+    socket.on('url', function (data) {
+        //specific url
+    });
+
+    socket.on('not_found', function () {
+        //url not found
+    });
+            
     $('#start').on('click', function(){
-        //start spider
         updating = true;
         setTimeout(update, 100);
     });

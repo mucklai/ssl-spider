@@ -1,7 +1,7 @@
 var ssllabs = require('node-ssllabs');
 var https = require('https');
 var file = 'public/top-1m.csv';
-var port = 80;
+var port = 8080;
 var url = {
 	name: null,
 	valid_to: null,
@@ -86,14 +86,13 @@ function scan_urls(url_array, stable_array, expiring_array, no_ssl_array, sha1_a
 	}
 }
 
-var app = require('express').createServer();
-var io = require('socket.io')(app);
+var app = require('express')();
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
 
-app.listen(port);
+server.listen(port);
 
-app.get('/', function (req, res) {
-  res.sendfile(__dirname + '/index.html');
-});
+app.use(express.static('public'));
 
 io.on('connection', function (socket) {
 	socket.url_array = [];
@@ -103,9 +102,8 @@ io.on('connection', function (socket) {
 	socket.sha1_array = [];
 	socket.i = 0;
 	socket.j = 0;
-	
-	var return_data = JSON.stringify({type: 0});
-	socket.emit('data', return_data);
+
+	socket.emit('initialize');
 
 	socket.on('start', function (data) {
 		var date = data.date;
@@ -113,15 +111,9 @@ io.on('connection', function (socket) {
 	});
 
 	socket.on('update_me', function (data) {
+		// data has attributes type (of url), page
 		var urls_to_send = null;
 		data = JSON.parse(data);
-		if (data.hasOwnProperty('last_index')) {
-			var last_index = data.lastIndex;
-			new_index = socket.url_array.length;
-			if (new_index > last_index) {
-				new_urls = url_array.slice(last_index, new_index);
-			}
-		}
 		var first = data.page * 20;
 		switch (data.type) {
 			case EXPIRING:
@@ -147,8 +139,26 @@ io.on('connection', function (socket) {
 			num_expired: socket.expiring_array.length,
 			num_stable: socket.stable_array.length,
 			num_sha1: socket.sha1_array.length
-		}
+		};
+		return_data = JSON.stringify(return_data);
+		socket.emit('update', return_data);
+		console.log(return_data);
+	});
 
-		console.log(data);
+	socket.on('url', function(data){
+		//data has attribute name (of url)
+		var found = false;
+		data = JSON.parse(data);
+		for (var a = 0; a < url_array.length; a++) {
+			if (url_array[a].name == data.name) {
+				found = true;
+				var return_data = JSON.stringify(url_array[a]);
+				socket.emit('url', return_data);
+				break;
+			}
+		}
+		if (!found) {
+			socket.emit('not_found');
+		}
 	});
 });
