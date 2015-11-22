@@ -17,3 +17,15 @@
 	margin-top:6%;
 	text-align:center;
 }
+table thead{
+	display:block;
+}
+table tbody{
+	height:300px;
+	overflow-y:scroll; 
+	display:block;
+}
+
+tr{
+	width: 100%;
+}

@@ -56,10 +56,10 @@
 	<div class="container" style="background-color:white; width:100%">
 		<div class="col-lg-6" style ="background-color:white; margin-top:3%" >
 			<ul class="nav nav-tabs">
-			  <li class=""><a  href="#expiring" data-toggle="tab" aria-expanded="false">Expiring</a></li>
-			  <li class=""><a  href="#nossl" data-toggle="tab" aria-expanded="false">No-SSL</a></li>
-			  <li class=""><a  href="#sha" data-toggle="tab" aria-expanded="false">SHA</a></li>
-			  <li class=""><a  href="#stable" data-toggle="tab" aria-expanded="false">Stable</a></li>
+			  <li class=""><a id="0" class="table_nav" href="#expiring" data-toggle="tab" aria-expanded="false">Expiring</a></li>
+			  <li class=""><a id="1" class="table_nav" href="#stable" data-toggle="tab" aria-expanded="false">Stable</a></li>
+			  <li class=""><a id="2" class="table_nav" href="#no_ssl" data-toggle="tab" aria-expanded="false">No-SSL</a></li>
+			  <li class=""><a id="3" class="table_nav" href="#sha1" data-toggle="tab" aria-expanded="false">SHA1</a></li>
 			</ul>
 			<div id="myTabContent" class="tab-content">
 			  <div class="tab-pane fade active in" id="expiring">
@@ -72,18 +72,7 @@
 				      <th>Expiration Date</th>
 				    </tr>
 				  </thead>
-				  <tbody>
-				    <tr class="info" id ="google">
-				      <td> 1</td>
-				      <td>Column content</td>
-				      <td>Column content</td>
-				    </tr>
-
-				    <tr class="info">
-				      <td>1</td>
-				      <td>Column conmargin-lefttent</td>
-				      <td>Column content</td>
-				    </tr>
+				  <tbody id="expiration_tbody">
    				   </tbody>
 				  </table> 
 				 </div>
@@ -99,13 +88,49 @@
 					</ul> </center>
 				 </div>
 			  </div>
-			  <div class="tab-pane fade" id="nossl">e
+			  <div class="tab-pane fade" id="nossl">
+			  	<div class="row">
+	  			<table class="table table-striped table-hover ">
+				  <thead>
+				    <tr>
+				      <th>#</th>
+				      <th>Website</th>
+				      <th>Expiration Date</th>
+				    </tr>
+				  </thead>
+				  <tbody id="stable_tbody">
+   				   </tbody>
+				  </table> 
+				 </div>
 			  </div>
-			  <div class="tab-pane fade" id="sha">f
+			  <div class="tab-pane fade" id="sha">
+			  	<div class="row">
+	  			<table class="table table-striped table-hover ">
+				  <thead>
+				    <tr>
+				      <th>#</th>
+				      <th>Website</th>
+				    </tr>
+				  </thead>
+				  <tbody id="no_ssl_tbody">
+   				   </tbody>
+				  </table> 
+				 </div>
 			  </div>
 			  <div class="tab-pane fade" id="stable">
-			  
-			  hgvcghc
+			   <div class="row">
+	  			<table class="table table-striped table-hover ">
+				  <thead>
+				    <tr>
+				      <th>#</th>
+				      <th>Website</th>
+				      <th>Hash Algorithm</th>
+				    </tr>
+				  </thead>
+				  <tbody id="sha1_tbody">
+   				   </tbody>
+				  </table> 
+				</div>
 			  </div>
 			</div>
 		</div>
@@ -137,17 +162,12 @@
 				
 		</div>
 	</div>	
-	<!-- Results progress -->
-	
-	
+	<!-- Results progress -->	
 </div>
-
-
-
 <!-- Body End -->
 
-<!-- Modal Start All Purpose -->
 
+<!-- Modal Start All Purpose -->
 	<div class="modal" id="myModal">
 	  <div class="modal-dialog">
 	    <div class="modal-content">
@@ -166,7 +186,8 @@
 	    </div>
 	  </div>
 	</div>
-
 <!-- Modal End All Purpose -->
+
+
 </body>
 </html>

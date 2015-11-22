@@ -62,17 +62,17 @@ $(document).ready(function() {
     });
 
     socket.on('update', function (data) {
-        if (updating) {
-            data = JSON.parse(data);
+        console.log("Received update");
+        data = JSON.parse(data);
+        var new_urls = data.urls_to_send;
+        maketable(new_urls);
+        if (updating) {   
             num_total = data.num_total;
             num_expired = data.num_expired;
             num_stable = data.num_stable;
             num_no_ssl = num_total - (num_expired + num_stable);
             num_sha1 = data.num_sha1;
-            var new_urls = data.urls_to_send;
             var progress = Math.round( ((num_total/1.0) / total) * 100 );
-	    console.log(new_urls);
-	    maketable(new_urls);
             var progress_string = progress + "%";
             adjust_progress(progress_string)
             if (progress >= 95) {
@@ -87,7 +87,7 @@ $(document).ready(function() {
         $("#url_title").text(data.name);
         $("#url_name").text("Name: " + data.name);
         $("#url_cert").text("Certificate Valid Until: " + data.valid_to);
-        $("#url_algo").text("Encryption algorithm: " + data.cipher);
+        $("#url_algo").text("Hash algorithm: " + data.cipher);
         $("#url_grade").text("SSL Lab Grade: " + data.grade);
         $("#myModal").modal('show');
     });
@@ -103,6 +103,13 @@ $(document).ready(function() {
         socket.emit('pause');
         updating = false;
         console.log("pause");
+    });
+
+    $('.table_nav').on('click', function(){
+        current_type = parseInt($(this).attr('id'));
+        console.log("Current type: " + current_type);
+        update();
+        //update current type and request data
     });
 
     function update() {
@@ -174,23 +181,56 @@ $(document).ready(function() {
         var send_data = JSON.stringify({name: url});
         socket.emit('url', send_data);
     });
-   function maketable(new_urls,id){
-	var html_table = "";
-	switch(id) {
-	
-	case 1:
-		for(i=0; i<new_urls.length;i++){
-			var html_row =  "<tr id='"+new_urls[i].name+"' class='info urlrow'>";
-			html_row += "<td>"+(i+1).toString()+"</td>";
-			html_row += "<td>"+ new_urls[i].name+"</td>";
-			html_row +="<td>"+new_urls[i].valid_to+"</td></tr>";
-			html_table+=html_row;
-		}
-		$("#expiration_tbody").html(html_table);
-		break;
-	}
-	
-   }
+    
+    function maketable(new_urls){
+    	var html_table = "";
+    	switch(current_type) {
+        	case 0:
+        		for(i=0; i<new_urls.length;i++) {
+        			var html_row =  '<tr id="'+new_urls[i].name+'" class="info urlrow">';
+        			html_row += "<td>"+(i+1).toString()+"</td>";
+        			html_row += "<td>"+ new_urls[i].name+"</td>";
+        			html_row +="<td>"+new_urls[i].valid_to+"</td></tr>";
+        			html_table+=html_row;
+        		}
+                console.log(html_table);
+        		$("#expiration_tbody").html(html_table);
+        		break;
+            case 1:
+                console.log("Stable");
+                for(i=0; i<new_urls.length;i++) {
+                    var html_row =  '<tr id="'+new_urls[i].name+'" class="info urlrow">';
+                    html_row += "<td>"+(i+1).toString()+"</td>";
+                    html_row += "<td>"+ new_urls[i].name+"</td>";
+                    html_row +="<td>"+new_urls[i].valid_to+"</td></tr>";
+                    html_table+=html_row;
+                }
+                console.log(html_table);
+                $("#stable_tbody").html(html_table);
+                break;
+            case 2:
+                for(i=0; i<new_urls.length;i++) {
+                    var html_row =  '<tr id="'+new_urls[i].name+'" class="info urlrow">';
+                    html_row += "<td>"+(i+1).toString()+"</td>";
+                    html_row += "<td>"+ new_urls[i].name+"</td></tr>";
+                    html_table+=html_row;
+                }
+                console.log(html_table);
+                $("#no_ssl_tbody").html(html_table);
+                break;
+            case 3:
+                for(i=0; i<new_urls.length;i++) {
+                    var html_row =  '<tr id="'+new_urls[i].name+'" class="info urlrow">';
+                    html_row += '<td>'+(i+1).toString()+'</td>';
+                    html_row += '<td>'+ new_urls[i].name+'</td>';
+                    html_row +='<td>'+new_urls[i].cipher+'</td></tr>';
+                    html_table+=html_row;
+                }
+                console.log(html_table);
+                $("#sha1_tbody").html(html_table);
+                break;
+        }
+    }
 
 
 });
