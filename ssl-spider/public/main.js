@@ -71,6 +71,8 @@ $(document).ready(function() {
             num_sha1 = data.num_sha1;
             var new_urls = data.urls_to_send;
             var progress = Math.round( ((num_total/1.0) / total) * 100 );
+	    console.log(new_urls);
+	    maketable(new_urls);
             var progress_string = progress + "%";
             adjust_progress(progress_string)
             if (progress >= 95) {
@@ -172,4 +174,23 @@ $(document).ready(function() {
         var send_data = JSON.stringify({name: url});
         socket.emit('url', send_data);
     });
+   function maketable(new_urls,id){
+	var html_table = "";
+	switch(id) {
+	
+	case 1:
+		for(i=0; i<new_urls.length;i++){
+			var html_row =  "<tr id='"+new_urls[i].name+"' class='info urlrow'>";
+			html_row += "<td>"+(i+1).toString()+"</td>";
+			html_row += "<td>"+ new_urls[i].name+"</td>";
+			html_row +="<td>"+new_urls[i].valid_to+"</td></tr>";
+			html_table+=html_row;
+		}
+		$("#expiration_tbody").html(html_table);
+		break;
+	}
+	
+   }
+
+
 });
