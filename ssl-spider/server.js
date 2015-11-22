@@ -86,15 +86,17 @@ function scan_urls(url_array, stable_array, expiring_array, no_ssl_array, sha1_a
 	}
 }
 
-var app = require('express')();
+var express = require('express')
+var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 
 server.listen(port);
-
+console.log("Listening");
 app.use(express.static('public'));
 
 io.on('connection', function (socket) {
+	console.log("Connection");
 	socket.url_array = [];
 	socket.stable_array = [];
 	socket.expiring_array = [];
