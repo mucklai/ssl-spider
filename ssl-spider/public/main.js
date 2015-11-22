@@ -52,8 +52,6 @@ $(document).ready(function() {
         num_sha1 = data.num_sha1;
         var new_urls = data.urls_to_send;
         console.log("Progress: " + (((num_total/1.0) / total) * 100));
-        console.log("New data:");
-        //console.log(new_urls);
         if (num_total == total) {
             complete();
         }

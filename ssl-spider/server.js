@@ -14,32 +14,33 @@ var STABLE = 1;
 var NO_SSL = 2;
 var SHA1 = 3;
 
+var pause = false;
+var names = [];
+var reading_complete = false;
+
+var time = new Date();
+rl = require('readline').createInterface({
+	input: require('fs').createReadStream(file)
+});
+
+rl.on('line', function (line) {
+	names.push(line.split(',')[1]);
+});
+
+rl.on('close', function (line) {
+	reading_complete = true;
+	console.log((new Date()) - time);
+});
+
 function scan_urls(url_array, stable_array, expiring_array, no_ssl_array, sha1_array, i, j, date, rl) {
-
-	var time = new Date();
-	rl = require('readline').createInterface({
-		input: require('fs').createReadStream(file)
-	});
-
-	rl.on('line', function (line) {
+	if (!reading_complete){
+		setInterval(scan_urls(url_array, stable_array, expiring_array, no_ssl_array, sha1_array, i, j, date, rl), 1000);
+		return;
+	}
+	
+	while (i < names.length) {
+		check_ssl(names[i]);
 		i++;
-		var x = line.split(',')[1];
-		check_ssl(x);
-	});
-
-	rl.on('close', function (line) {
-		done();
-	});
-
-	function done() {
-		if (((j/1.0) / i ) > 0.95)  {
-			//console.log(url_array.length);
-			//console.log((new Date()) - time  );
-			//console.log(url_array[url_array.length-1]);
-		} else {
-			//console.log(i + " " + j);
-			setTimeout(done,100);
-		}
 	}
 
 	function check_ssl(target) {
@@ -115,7 +116,6 @@ io.on('connection', function (socket) {
 
 	socket.on('update_me', function (data) {
 		// data has attributes type (of url), page
-		console.log("received");
 		var urls_to_send = null;
 		data = JSON.parse(data);
 		var first = data.page * 20;
@@ -145,9 +145,7 @@ io.on('connection', function (socket) {
 			num_sha1: socket.sha1_array.length
 		};
 		return_data = JSON.stringify(return_data);
-		socket.emit('update', return_data);
-		console.log("sent");
-		//console.log(return_data);
+		socket.emit('update', return_data);;
 	});
 
 	socket.on('url', function(data){
