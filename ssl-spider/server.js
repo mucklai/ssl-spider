@@ -47,10 +47,9 @@ function scan_urls(url_array, stable_array, expiring_array, no_ssl_array, sha1_a
 		for(i=0;i<=a.length;i++){
 			if(a[i]=="SHA"){
 				return true;			
-			}else{
-				return false;			
 			}		
 		}
+		return false;
 		
 	}
 	function check_ssl(target) {
